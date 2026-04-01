@@ -1,0 +1,170 @@
+@import "tailwindcss";
+
+/* ─── CSS Variables for Glowing 2024 Aesthetic ─── */
+:root {
+  --gold-light: #FCEABB;
+  --gold: #F5D38A;
+  --gold-dark: #BFA054;
+  --gold-glow: rgba(245, 211, 138, 0.4);
+  
+  --deep-bg: #09090b;
+  --surface-1: rgba(255, 255, 255, 0.02);
+  --surface-2: rgba(255, 255, 255, 0.04);
+  
+  --border-subtle: rgba(255, 255, 255, 0.05);
+  --border-strong: rgba(255, 255, 255, 0.1);
+  --border-gold: rgba(245, 211, 138, 0.2);
+
+  --text-primary: #ffffff;
+  --text-muted: rgba(255, 255, 255, 0.5);
+
+  --gradient-gold: linear-gradient(135deg, var(--gold-light) 0%, var(--gold) 50%, var(--gold-dark) 100%);
+  --gradient-dark: radial-gradient(circle at top right, rgba(245,211,138,0.05) 0%, #09090b 50%);
+  --shadow-glass: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+}
+
+/* ─── Base Reset & Body ─── */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+  background-color: var(--deep-bg);
+}
+
+body {
+  background-color: var(--deep-bg);
+  background-image: radial-gradient(circle at 15% 50%, rgba(245, 211, 138, 0.03), transparent 25%),
+                    radial-gradient(circle at 85% 30%, rgba(245, 211, 138, 0.02), transparent 25%);
+  color: var(--text-primary);
+  -webkit-font-smoothing: antialiased;
+  line-height: 1.6;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* ─── Fonts ─── */
+.font-outfit { font-family: var(--font-outfit), sans-serif; }
+.font-alexandria { font-family: var(--font-alexandria), sans-serif; }
+
+[dir="rtl"] body, [lang="ar"] body {
+  font-family: var(--font-alexandria), sans-serif;
+}
+[dir="ltr"] body, [lang="fr"] body {
+  font-family: var(--font-outfit), sans-serif;
+}
+
+/* ─── Glassmorphism Components ─── */
+.glass-panel {
+  background: var(--surface-1);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid var(--border-subtle);
+  border-top: 1px solid var(--border-strong);
+  box-shadow: var(--shadow-glass);
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.glass-panel:hover {
+  background: var(--surface-2);
+  border-color: var(--border-gold);
+  transform: translateY(-2px);
+  box-shadow: 0 12px 40px 0 rgba(0,0,0,0.5), inset 0 0 0 1px rgba(245,211,138,0.1);
+}
+
+.glass-nav {
+  background: rgba(9, 9, 11, 0.7);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+/* ─── Shiny Gold Utilities ─── */
+.text-gold {
+  color: var(--gold);
+  text-shadow: 0 0 20px var(--gold-glow);
+}
+
+.text-gold-gradient {
+  background: var(--gradient-gold);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.bg-gold-gradient {
+  background: var(--gradient-gold);
+  color: #000;
+  box-shadow: 0 4px 20px var(--gold-glow);
+  transition: all 0.3s ease;
+  border: none;
+}
+.bg-gold-gradient:hover {
+  transform: translateY(-1px) scale(1.02);
+  box-shadow: 0 8px 25px rgba(245, 211, 138, 0.6);
+  filter: brightness(1.1);
+}
+
+/* ─── Interactive Utilities ─── */
+.mag-btn {
+  position: relative;
+  overflow: hidden;
+}
+.mag-btn::after {
+  content: '';
+  position: absolute;
+  top: 50%; left: 50%;
+  width: 0; height: 0;
+  background: rgba(255,255,255,0.1);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  transition: width 0.4s ease, height 0.4s ease;
+}
+.mag-btn:hover::after {
+  width: 300px;
+  height: 300px;
+}
+
+/* ─── Image Levitation ─── */
+.levitate {
+  transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.glass-panel:hover .levitate {
+  transform: scale(1.08) translateY(-10px);
+}
+
+/* ─── Forms & Inputs ─── */
+.input-glass {
+  background: var(--surface-1);
+  border: 1px solid var(--border-subtle);
+  color: white;
+  transition: all 0.3s ease;
+}
+.input-glass:focus {
+  outline: none;
+  background: rgba(255,255,255,0.05);
+  border-color: var(--gold);
+  box-shadow: 0 0 0 4px rgba(245, 211, 138, 0.1);
+}
+
+/* ─── Text Utilities ─── */
+.tracking-ultra {
+  letter-spacing: 0.3em;
+}
+
+/* ─── Native Scrollbar ─── */
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-track { background: var(--deep-bg); }
+::-webkit-scrollbar-thumb { background: var(--border-subtle); border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: var(--gold-dark); }
+
+::selection {
+  background: rgba(245, 211, 138, 0.2);
+  color: var(--gold-light);
+}
+
+[dir="rtl"] .ltr-only { display: none; }
+[dir="ltr"] .rtl-only { display: none; }
