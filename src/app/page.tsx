@@ -1,9 +1,6 @@
 "use client";
 
 import React from "react";
-import Header from "@/components/layout/Header";
-import Footer from "@/components/layout/Footer";
-import CartDrawer from "@/components/ui/CartDrawer";
 import FragranceScroll from "@/components/home/FragranceScroll";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { ArrowLeft, ShoppingBag, Sparkles } from "lucide-react";
@@ -23,9 +20,7 @@ export default function Home() {
   const { addItem } = useCartStore();
 
   return (
-    <main dir={dir}>
-      <Header />
-      <CartDrawer />
+    <div dir={dir}>
       
       {/* Epic 120-Frames Fragrance Animation */}
       <FragranceScroll />
@@ -113,7 +108,6 @@ export default function Home() {
         </div>
       </section>
       
-      <Footer />
-    </main>
+    </div>
   );
 }

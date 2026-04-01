@@ -3,11 +3,11 @@
 import React, { useState, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Search, ShoppingBag, Eye, ChevronDown } from "lucide-react";
-import Header from "@/components/layout/Header";
-import Footer from "@/components/layout/Footer";
 import { useLanguage } from "@/context/LanguageContext";
 import { useCartStore } from "@/store/useCartStore";
 import Link from "next/link";
+import Image from "next/image";
+import { Button } from "@/components/ui/Button";
 
 const UNITS = ["100g", "500g", "1kg", "10kg"] as const;
 type Unit = typeof UNITS[number];
@@ -41,14 +41,24 @@ function ProductCard({ product }: { product: typeof PRODUCTS[0] }) {
       className="group glass-panel rounded-2xl overflow-hidden flex flex-col relative"
     >
       {/* Visual Area */}
-      <div className="aspect-[4/5] relative bg-gradient-to-br from-[#120f0d] to-[#09090b] flex items-center justify-center overflow-hidden">
+      <div className="aspect-[3/4] relative bg-gradient-to-br from-[var(--surface-1)] to-[var(--color-bg-primary)] flex items-center justify-center overflow-hidden">
         {/* Glow behind the icon */}
-        <div className="absolute inset-0 bg-[var(--gold)]/5 group-hover:bg-[var(--gold)]/10 transition-colors duration-700 blur-2xl" />
+        <div className="absolute inset-0 bg-[var(--color-gold)]/5 group-hover:bg-[var(--color-gold)]/10 transition-colors duration-700 blur-2xl" />
         
-        <span className="font-playfair text-6xl text-[var(--gold)]/20 levitate select-none">✦</span>
+        {product.image ? (
+          <Image
+            src={product.image}
+            alt={product.name}
+            fill
+            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+            className="object-cover group-hover:scale-105 transition-transform duration-700 ease-[cubic-bezier(0.2,0.8,0.2,1)]"
+          />
+        ) : (
+          <span className="font-playfair text-6xl text-[var(--color-gold)]/20 levitate select-none relative z-10">✦</span>
+        )}
 
         {/* Tags */}
-        {product.tags.length > 0 && (
+        {product.tags && product.tags.length > 0 && (
           <div className="absolute top-4 inset-x-4 flex flex-wrap gap-2">
             {product.tags.map(tag => (
               <span key={tag} className="text-[9px] font-bold uppercase tracking-widest px-3 py-1.5 bg-[rgba(255,255,255,0.1)] backdrop-blur-md rounded-full text-white border border-[rgba(255,255,255,0.1)]">
@@ -101,12 +111,13 @@ function ProductCard({ product }: { product: typeof PRODUCTS[0] }) {
             <p className="font-outfit text-xl font-light text-white">
               {finalPrice.toLocaleString("fr-DZ")} <span className="text-[10px] text-[var(--text-muted)]">{t("store.currency")}</span>
             </p>
-            <button
+            <Button
+              variant="icon"
+              className="w-10 h-10 shadow-lg"
               onClick={() => addItem({ id: product.id, name: product.name, price: finalPrice, image: "", category: product.category, unit: selectedUnit })}
-              className="flex items-center justify-center w-10 h-10 rounded-full bg-[var(--surface-1)] border border-[var(--border-subtle)] hover:bg-gold-gradient hover:border-transparent hover:text-black hover:scale-105 transition-all text-[var(--gold)] shadow-lg"
             >
               <ShoppingBag size={14} />
-            </button>
+            </Button>
           </div>
         </div>
       </div>
@@ -137,8 +148,6 @@ export default function StoreClient() {
       {/* Background Ambience */}
       <div className="absolute top-0 left-0 w-full h-[500px] bg-gradient-to-b from-[var(--gold)]/5 to-transparent pointer-events-none" />
       <div className="absolute -top-40 right-[-10%] w-[600px] h-[600px] bg-[var(--gold)]/10 rounded-full blur-[150px] pointer-events-none" />
-      
-      <Header />
       
       <main className="relative z-10 pt-36 pb-32 px-6 md:px-12">
         <div className="max-w-[1600px] mx-auto">
@@ -182,17 +191,15 @@ export default function StoreClient() {
           {/* Glass Category Pills */}
           <div className="flex flex-wrap gap-3 mb-12 px-4">
             {categories.map(cat => (
-              <button
+              <Button
                 key={cat.id}
+                variant={selectedCategory === cat.id ? "primary" : "ghost"}
+                size="sm"
                 onClick={() => setSelectedCategory(cat.id)}
-                className={`relative px-6 py-3 rounded-full text-[11px] font-bold uppercase tracking-widest transition-all duration-300 overflow-hidden ${
-                  selectedCategory === cat.id
-                    ? "text-black bg-gold-gradient shadow-lg shadow-[var(--gold)]/20"
-                    : "text-white/60 bg-[var(--surface-1)] border border-[var(--border-subtle)] hover:text-white hover:border-[var(--gold)]/30 backdrop-blur-md"
-                }`}
+                className="px-6 py-3 tracking-widest"
               >
-                <span className="relative z-10">{cat.label}</span>
-              </button>
+                {cat.label}
+              </Button>
             ))}
           </div>
 
@@ -228,7 +235,6 @@ export default function StoreClient() {
           </div>
         </div>
       </main>
-      <Footer />
     </div>
   );
 }

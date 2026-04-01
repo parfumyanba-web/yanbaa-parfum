@@ -4,11 +4,10 @@ import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { CheckCircle, Truck, ShoppingBag, Phone, MapPin, ArrowLeft, ArrowRight } from "lucide-react";
 import Link from "next/link";
-import Header from "@/components/layout/Header";
-import Footer from "@/components/layout/Footer";
 import { useCartStore } from "@/store/useCartStore";
 import { useLanguage } from "@/context/LanguageContext";
 import { createClient } from "@/utils/supabase/client";
+import { Button } from "@/components/ui/Button";
 
 export default function CheckoutClient() {
   const { t, dir } = useLanguage();
@@ -71,8 +70,6 @@ export default function CheckoutClient() {
         <div className="absolute inset-0 bg-gradient-to-b from-[#10B981]/5 to-transparent pointer-events-none" />
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-[#10B981]/10 rounded-full blur-[150px] pointer-events-none" />
         
-        <Header />
-        
         <motion.div
           initial={{ opacity: 0, scale: 0.9, y: 20 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
@@ -111,8 +108,6 @@ export default function CheckoutClient() {
         <div className="absolute bottom-0 left-0 w-[600px] h-[600px] bg-[#09090b]/80 rounded-full blur-[150px]" />
         <div className="absolute inset-0 bg-[url('/bg-texture.png')] opacity-10 mix-blend-overlay" />
       </div>
-
-      <Header />
       
       <main className="relative z-10 pt-36 pb-32 px-6 md:px-12">
         <div className="max-w-[1400px] mx-auto">
@@ -183,10 +178,14 @@ export default function CheckoutClient() {
 
                 {/* Action Button (Mobile Only, Desktop handles it in sticky sidebar) */}
                 <div className="block lg:hidden mt-10">
-                  <button type="submit" disabled={isLoading || items.length === 0}
-                    className="w-full py-5 rounded-2xl text-[11px] font-bold uppercase tracking-widest transition-all duration-300 disabled:opacity-40 bg-gold-gradient text-black shadow-[0_8px_30px_rgba(245,211,138,0.2)]">
+                  <Button
+                    type="submit"
+                    variant="primary"
+                    disabled={isLoading || items.length === 0}
+                    className="w-full py-5 rounded-2xl shadow-[0_8px_30px_rgba(245,211,138,0.2)]"
+                  >
                     {isLoading ? t("common.loading") : t("checkout.submit")}
-                  </button>
+                  </Button>
                 </div>
               </form>
             </div>
@@ -226,23 +225,23 @@ export default function CheckoutClient() {
                 </div>
 
                 {/* Submits form programmatically from outside */}
-                <button 
+                <Button 
                   onClick={(e) => {
                     const form = document.querySelector('form');
                     if (form) form.requestSubmit();
                   }}
+                  variant="primary"
                   disabled={isLoading || items.length === 0}
-                  className="hidden lg:flex w-full mt-10 items-center justify-center py-5 rounded-2xl text-[11px] font-bold uppercase tracking-[0.2em] transition-all duration-300 disabled:opacity-50 bg-gold-gradient text-black hover:scale-[1.02] shadow-[0_8px_30px_rgba(245,211,138,0.2)] cursor-pointer"
+                  className="hidden lg:flex w-full mt-10 py-5 rounded-2xl shadow-[0_8px_30px_rgba(245,211,138,0.2)]"
                 >
                   {isLoading ? t("common.loading") : t("checkout.submit")}
-                </button>
+                </Button>
               </div>
             </div>
 
           </div>
         </div>
       </main>
-      <Footer />
     </div>
   );
 }

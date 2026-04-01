@@ -26,6 +26,11 @@ const DICTIONARY: Record<Language, Record<string, string>> = {
 
     /* ── Hero / Home ── */
     "hero.title": "جوهر العطور",
+    "hero.title1": "عطور فاخرة من ينبع",
+    "hero.subtitle1": "من الجزائر إلى العالم",
+    "hero.title2": "مجموعة العود الملكي",
+    "hero.subtitle2": "رفاهية لا تقاوم",
+    "hero.title3": "اكتشف عالم الرائحة",
     "hero.subtitle": "من قلب الجزائر إلى زجاجتك",
     "hero.cta": "اكتشف المجموعة",
     "home.newArrivals": "الوافدون الجدد",
@@ -68,6 +73,10 @@ const DICTIONARY: Record<Language, Record<string, string>> = {
     "cart.remove": "حذف",
     "cart.continueShopping": "مواصلة التسوق",
     "cart.loginRequired": "يجب تسجيل الدخول لتأكيد الطلب",
+    "cart.explore": "اكتشف المجموعات",
+    "cart.subtotal": "المجموع الفرعي",
+    "cart.shippingInfo": "رسوم التوصيل تُحسب عند الدفع",
+    "cart.totalB2B": "المجموع الكلي (جملة)",
 
     /* ── Checkout ── */
     "checkout.title": "تأكيد الطلب",
@@ -168,6 +177,10 @@ const DICTIONARY: Record<Language, Record<string, string>> = {
     "about.storyText": "ينبع للعطور علامة جزائرية أصيلة، تجمع بين عراقة الشرق وأناقة الغرب. نُقدم لكم أفضل العطور بأسعار منافسة تناسب السوق الجزائري.",
     "about.mission": "رسالتنا",
     "about.contact": "تواصل معنا",
+    "about.desc": "وصف عن المتجر وعن منتجاتنا الفاخرة والعصرية.",
+
+    /* ── Footer ── */
+    "footer.address": "الجزائر العاصمة، الجزائر",
 
     /* ── Collections / About ── */
     "collections.title": "المجموعات",
@@ -210,6 +223,11 @@ const DICTIONARY: Record<Language, Record<string, string>> = {
 
     /* ── Hero / Home ── */
     "hero.title": "L'Essence du Parfum",
+    "hero.title1": "Parfums de Luxe Yanba",
+    "hero.subtitle1": "D'Algérie au monde entier",
+    "hero.title2": "Collection Oud Royal",
+    "hero.subtitle2": "Luxe irresistible",
+    "hero.title3": "Découvrez le Monde des Senteurs",
     "hero.subtitle": "Du cœur de l'Algérie à votre flacon",
     "hero.cta": "Découvrir la Collection",
     "home.newArrivals": "Nouveautés",
@@ -252,6 +270,10 @@ const DICTIONARY: Record<Language, Record<string, string>> = {
     "cart.remove": "Supprimer",
     "cart.continueShopping": "Continuer mes Achats",
     "cart.loginRequired": "Vous devez être connecté pour confirmer votre commande",
+    "cart.explore": "Explorer les Collections",
+    "cart.subtotal": "Sous-total",
+    "cart.shippingInfo": "Frais de livraison calculés au paiement",
+    "cart.totalB2B": "Montant Total (B2B)",
 
     /* ── Checkout ── */
     "checkout.title": "Confirmation de Commande",
@@ -352,6 +374,10 @@ const DICTIONARY: Record<Language, Record<string, string>> = {
     "about.storyText": "Yanba Parfums est une marque algérienne authentique qui allie l'élégance de l'Orient et du Occident. Nous proposons les meilleurs parfums à des prix compétitifs adaptés au marché algérien.",
     "about.mission": "Notre Mission",
     "about.contact": "Nous Contacter",
+    "about.desc": "Description complète du magasin et de nos produits de luxe contemporains.",
+
+    /* ── Footer ── */
+    "footer.address": "Alger, Algérie",
 
     /* ── Collections / About ── */
     "collections.title": "Collections",

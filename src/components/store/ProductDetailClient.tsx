@@ -4,20 +4,20 @@ import React, { useState } from "react";
 import { motion } from "framer-motion";
 import { ArrowLeft, ShoppingBag, ChevronDown } from "lucide-react";
 import Link from "next/link";
-import Header from "@/components/layout/Header";
-import Footer from "@/components/layout/Footer";
+import Image from "next/image";
 import { useLanguage } from "@/context/LanguageContext";
 import { useCartStore } from "@/store/useCartStore";
+import { Button } from "@/components/ui/Button";
 
 const UNITS = ["100g", "500g", "1kg", "10kg"] as const;
 type Unit = typeof UNITS[number];
 const UNIT_MULTIPLIERS: Record<Unit, number> = { "100g": 1, "500g": 5, "1kg": 10, "10kg": 100 };
 
-const PRODUCTS: Record<string, { name: string; category: string; brand: string; group: string; basePrice: number; description: string; tags: string[] }> = {
-  "1": { name: "عود ملكي / Oud Royal", category: "شرقي", brand: "ينبع", group: "عود", basePrice: 12500, description: "مزيج فاخر من عود كمبوديا مع وردة الطائف. يتميز بعمق وغنى لا مثيل له، ويبقى على البشرة لساعات طويلة — تجربة عطرية ملكية بامتياز.", tags: ["جديد"] },
-  "2": { name: "ياسمين منتصف الليل", category: "زهري", brand: "ينبع", group: "زهري", basePrice: 8500, description: "ياسمين الليل مع نفحات المسك الأبيض الناعم. عطر يحمل سحر الليل وهدوءه في آنٍ واحد.", tags: ["الأكثر مبيعاً"] },
-  "3": { name: "صندل ذهبي / Santal Doré", category: "خشبي", brand: "ينبع", group: "خشبي", basePrice: 9800, description: "خشب الصندل الهندي النادر مع لمسات العنبر والمسك الأبيض. دفء حنون يلفّ حواسك.", tags: [] },
-  "4": { name: "وردة الصحراء", category: "زهري", brand: "ينبع", group: "زهري", basePrice: 7500, description: "جمال الصحراء الجزائرية في كل نقطة — وردة نضرة تتحدى القيظ بأناقة.", tags: ["جديد"] },
+const PRODUCTS: Record<string, { name: string; category: string; brand: string; group: string; basePrice: number; description: string; tags: string[]; image?: string | null }> = {
+  "1": { name: "عود ملكي / Oud Royal", category: "شرقي", brand: "ينبع", group: "عود", basePrice: 12500, description: "مزيج فاخر من عود كمبوديا مع وردة الطائف. يتميز بعمق وغنى لا مثيل له، ويبقى على البشرة لساعات طويلة — تجربة عطرية ملكية بامتياز.", tags: ["جديد"], image: null },
+  "2": { name: "ياسمين منتصف الليل", category: "زهري", brand: "ينبع", group: "زهري", basePrice: 8500, description: "ياسمين الليل مع نفحات المسك الأبيض الناعم. عطر يحمل سحر الليل وهدوءه في آنٍ واحد.", tags: ["الأكثر مبيعاً"], image: null },
+  "3": { name: "صندل ذهبي / Santal Doré", category: "خشبي", brand: "ينبع", group: "خشبي", basePrice: 9800, description: "خشب الصندل الهندي النادر مع لمسات العنبر والمسك الأبيض. دفء حنون يلفّ حواسك.", tags: [], image: null },
+  "4": { name: "وردة الصحراء", category: "زهري", brand: "ينبع", group: "زهري", basePrice: 7500, description: "جمال الصحراء الجزائرية في كل نقطة — وردة نضرة تتحدى القيظ بأناقة.", tags: ["جديد"], image: null },
 };
 
 export default function ProductDetailClient({ id }: { id: string }) {
@@ -30,8 +30,7 @@ export default function ProductDetailClient({ id }: { id: string }) {
 
   if (!product) {
     return (
-      <div dir={dir} className="min-h-screen bg-[var(--deep-bg)] flex items-center justify-center">
-        <Header />
+    <div dir={dir} className="min-h-screen bg-[var(--deep-bg)] flex items-center justify-center">
         <div className="text-center glass-panel p-16 rounded-3xl">
           <p className="font-playfair text-3xl text-white/50 mb-6">المنتج غير موجود</p>
           <Link href="/store" className="text-[var(--gold)] hover:text-white transition-colors uppercase tracking-widest text-xs font-bold">
@@ -52,7 +51,6 @@ export default function ProductDetailClient({ id }: { id: string }) {
 
   return (
     <div dir={dir} className="min-h-screen bg-[var(--deep-bg)] flex flex-col pt-24 lg:pt-0">
-      <Header />
       <main className="flex-1 flex flex-col lg:flex-row max-w-[1800px] w-full mx-auto">
         
         {/* Left: Immersive Image Pane */}
@@ -62,15 +60,34 @@ export default function ProductDetailClient({ id }: { id: string }) {
           className="w-full lg:w-1/2 lg:h-screen lg:sticky top-0 bg-gradient-to-br from-[#120f0d] to-[#09090b] border-r border-[var(--border-subtle)] flex items-center justify-center relative overflow-hidden min-h-[50vh]"
         >
           {/* Ambient Glow */}
-          <div className="absolute inset-0 bg-[var(--gold)]/5 blur-3xl pointer-events-none" />
-          <motion.div 
-            initial={{ scale: 0.8, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            transition={{ delay: 0.2, duration: 1, type: "spring", stiffness: 50 }}
-            className="group"
-          >
-            <span className="font-playfair text-[150px] md:text-[200px] text-[var(--gold)]/10 select-none levitate drop-shadow-2xl inline-block group-hover:text-[var(--gold)]/20 transition-all duration-700">✦</span>
-          </motion.div>
+          <div className="absolute inset-0 bg-[var(--color-gold)]/5 blur-3xl pointer-events-none" />
+          
+          {product.image ? (
+            <motion.div
+              initial={{ scale: 0.95, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              transition={{ delay: 0.2, duration: 1, ease: [0.16, 1, 0.3, 1] }}
+              className="relative w-full h-full max-h-[80vh] aspect-[3/4]"
+            >
+              <Image
+                src={product.image}
+                alt={product.name}
+                fill
+                sizes="(max-width: 1024px) 100vw, 50vw"
+                className="object-contain drop-shadow-2xl"
+                priority
+              />
+            </motion.div>
+          ) : (
+            <motion.div 
+              initial={{ scale: 0.8, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              transition={{ delay: 0.2, duration: 1, type: "spring", stiffness: 50 }}
+              className="group"
+            >
+              <span className="font-playfair text-[150px] md:text-[200px] text-[var(--color-gold)]/10 select-none levitate drop-shadow-2xl inline-block group-hover:text-[var(--color-gold)]/20 transition-all duration-700 relative z-10">✦</span>
+            </motion.div>
+          )}
           
           {/* Breadcrumb Absolute */}
           <Link href="/store" className="absolute top-6 left-6 flex items-center gap-2 text-white/50 hover:text-[var(--gold)] text-xs font-bold uppercase tracking-widest transition-colors group z-10 glass-panel px-4 py-2 rounded-full">
@@ -141,22 +158,22 @@ export default function ProductDetailClient({ id }: { id: string }) {
 
             {/* Action Bar */}
             <div className="pt-8 border-t border-[var(--border-subtle)]">
-              <button
+              <Button
+                variant="primary"
                 onClick={handleAdd}
-                className="w-full relative overflow-hidden flex items-center justify-center gap-3 py-5 rounded-2xl text-sm font-bold uppercase tracking-widest transition-all duration-300 transform active:scale-[0.98] shadow-[0_8px_30px_rgba(245,211,138,0.2)]"
-                style={{ background: added ? "#10B981" : "var(--gradient-gold)", color: added ? "white" : "#09090b" }}
+                className={`w-full py-5 rounded-2xl text-sm font-bold uppercase tracking-widest transition-all duration-300 shadow-[0_8px_30px_rgba(245,211,138,0.2)] ${
+                  added ? "bg-[#10B981] hover:bg-[#059669] text-white" : ""
+                }`}
               >
-                <motion.div animate={added ? { scale: [1, 1.2, 1] } : {}} className="flex items-center gap-2">
+                <div className="flex items-center gap-2">
                   <ShoppingBag size={18} />
-                  {added ? "✓ " + t("store.addToCart") : t("store.addToCart")}
-                </motion.div>
-                {!added && <div className="absolute inset-0 bg-white/20 opacity-0 hover:opacity-100 transition-opacity" />}
-              </button>
+                  {added ? t("common.confirm") : t("store.addToCart")}
+                </div>
+              </Button>
             </div>
           </motion.div>
         </div>
       </main>
-      <div className="lg:hidden"><Footer /></div>
     </div>
   );
 }

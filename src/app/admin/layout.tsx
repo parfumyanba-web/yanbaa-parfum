@@ -8,7 +8,7 @@ export default function AdminLayout({
   return (
     <div className="min-h-screen bg-[#121212] flex">
       <DashboardSidebar role="admin" />
-      <main className="flex-1 ml-64 p-12 overflow-y-auto">
+      <main className="flex-1 ltr:ml-[280px] rtl:mr-[280px] p-8 md:p-12 overflow-y-auto">
         {children}
       </main>
     </div>

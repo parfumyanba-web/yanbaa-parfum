@@ -3,8 +3,6 @@
 import React from "react";
 import { motion } from "framer-motion";
 import { Leaf, Award, Globe, MapPin, Phone, MessageCircle } from "lucide-react";
-import Header from "@/components/layout/Header";
-import Footer from "@/components/layout/Footer";
 import { useLanguage } from "@/context/LanguageContext";
 
 export default function AboutPage() {
@@ -19,9 +17,7 @@ export default function AboutPage() {
   const isAr = dir === "rtl";
 
   return (
-    <div dir={dir} className="min-h-screen bg-[#0a0a0a]">
-      <Header />
-
+    <div dir={dir} className="bg-[var(--deep-bg)]">
       {/* Hero Section */}
       <section className="relative min-h-[60vh] flex items-end pb-20 pt-32 px-6 md:px-12 overflow-hidden">
         {/* Background */}
@@ -127,7 +123,6 @@ export default function AboutPage() {
         </div>
       </section>
 
-      <Footer />
     </div>
   );
 }

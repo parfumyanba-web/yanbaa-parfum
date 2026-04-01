@@ -4,8 +4,6 @@ import React from "react";
 import { motion } from "framer-motion";
 import { Layers } from "lucide-react";
 import Link from "next/link";
-import Header from "@/components/layout/Header";
-import Footer from "@/components/layout/Footer";
 import { useLanguage } from "@/context/LanguageContext";
 
 const COLLECTIONS = [
@@ -20,9 +18,8 @@ export default function CollectionsPage() {
   const isAr = language === "ar";
 
   return (
-    <div dir={dir} className="min-h-screen bg-[#0a0a0a]">
-      <Header />
-      <main className="pt-28 pb-24 px-6 md:px-12">
+    <div dir={dir} className="min-h-screen bg-[var(--deep-bg)]">
+      <div className="pb-24 px-6 md:px-12">
         <div className="max-w-[1400px] mx-auto">
           <div className="mb-12">
             <motion.h1
@@ -67,8 +64,7 @@ export default function CollectionsPage() {
             ))}
           </div>
         </div>
-      </main>
-      <Footer />
+      </div>
     </div>
   );
 }

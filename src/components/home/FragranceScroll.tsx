@@ -3,8 +3,10 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useScroll, useTransform, motion, useSpring } from "framer-motion";
 import { useLanguage } from "@/context/LanguageContext";
+import { Button } from "@/components/ui/Button";
+import Link from "next/link";
 
-const TOTAL_FRAMES = 237;
+const TOTAL_FRAMES = 240;
 
 export default function FragranceScroll() {
   const { t, dir } = useLanguage();
@@ -133,8 +135,7 @@ export default function FragranceScroll() {
       <div className="sticky top-0 left-0 w-full h-screen overflow-hidden flex items-center justify-center">
         <canvas ref={canvasRef} className="w-full h-full object-contain" />
         
-        {/* Animated Overlays */}
-        <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none px-4">
+        <div className="absolute inset-0 z-20 flex flex-col items-center justify-center pointer-events-none px-4 bg-radial-gradient from-black/20 via-black/40 to-black/70">
           <motion.div
             style={{ 
               opacity: useTransform(smoothProgress, [0, 0.1, 0.2], [0, 1, 0]),
@@ -175,9 +176,11 @@ export default function FragranceScroll() {
             <h2 className="font-playfair text-4xl md:text-7xl text-[#D4AF37] mb-8">
               {t("hero.title3")}
             </h2>
-            <a href="/store" className="pointer-events-auto px-12 py-4 border border-[#D4AF37] text-[#D4AF37] hover:bg-[#D4AF37] hover:text-black transition-all duration-500 uppercase tracking-[0.2em] text-xs font-bold inline-block">
-              {t("hero.cta")}
-            </a>
+            <Link href="/store" className="pointer-events-auto">
+              <Button variant="secondary" className="px-12 py-4 tracking-[0.2em] text-xs font-bold transition-all duration-700">
+                {t("hero.cta")}
+              </Button>
+            </Link>
           </motion.div>
         </div>
       </div>
