@@ -2,18 +2,23 @@
 
 import React from "react";
 import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 import {
   LayoutDashboard, ShoppingCart, Package, Users, Settings,
-  LogOut, ShoppingBag, Heart, User, Tag, Globe
+  LogOut, ShoppingBag, Heart, User, Tag, Globe, ChevronRight
 } from "lucide-react";
 import { signOut } from "@/actions/auth";
 import { useLanguage } from "@/context/LanguageContext";
 import { motion } from "framer-motion";
 
-export default function DashboardSidebar({ role = "admin" }: { role?: "admin" | "client" }) {
+interface SidebarProps {
+  role?: "admin" | "client";
+  onClose?: () => void;
+}
+
+export default function DashboardSidebar({ role = "admin", onClose }: SidebarProps) {
   const pathname = usePathname();
-  const { t, dir } = useLanguage();
+  const { t, dir, language } = useLanguage();
 
   const ADMIN_ITEMS = [
     { label: t("dash.overview"), href: "/admin", icon: LayoutDashboard },
@@ -36,26 +41,41 @@ export default function DashboardSidebar({ role = "admin" }: { role?: "admin" | 
   return (
     <aside
       dir={dir}
-      className="fixed top-0 bottom-0 w-[280px] bg-[var(--deep-bg)] flex flex-col z-40 overflow-hidden border-e border-[var(--border-subtle)]"
+      className="fixed top-0 bottom-0 w-[280px] bg-[#0d0d0d] flex flex-col z-50 overflow-hidden border-e border-white/5 shadow-2xl"
       style={{ insetInlineStart: 0 }}
     >
-      {/* Decorative Blur */}
-      <div className="absolute top-0 right-0 w-[300px] h-[300px] bg-[var(--gold)]/5 rounded-full blur-[120px] pointer-events-none" />
+      {/* Absolute Background Elements */}
+      <div className="absolute top-0 right-0 w-64 h-64 bg-[var(--gold)]/5 rounded-full blur-[120px] pointer-events-none" />
+      <div className="absolute bottom-0 left-0 w-48 h-48 bg-white/5 rounded-full blur-[100px] pointer-events-none" />
 
-      {/* Brand */}
-      <Link href="/" className="px-8 py-8 flex items-center gap-4 group relative z-10">
-        <div className="w-10 h-10 rounded-full border border-[var(--gold)]/50 flex items-center justify-center bg-[var(--deep-bg)] shadow-[0_0_20px_rgba(245,211,138,0.1)] group-hover:scale-105 transition-transform">
-          <span className="text-[var(--gold)] text-lg font-bold font-outfit">Y</span>
+      {/* Brand & Identity */}
+      <div className="px-8 pt-10 pb-12 relative z-10">
+        <Link href="/" className="inline-block mb-10 group" onClick={onClose}>
+          <h2 className="text-2xl font-playfair text-white tracking-widest uppercase italic group-hover:text-gold-gradient transition-all">
+            Yanba<span className="text-[var(--gold)]">✦</span>
+          </h2>
+        </Link>
+
+        {/* Mini Profile (Mock for now) */}
+        <div className="glass-card mb-4 p-4 flex items-center gap-4 border-white/5">
+          <div className="w-10 h-10 rounded-full bg-gold-gradient flex items-center justify-center text-black font-black text-xs uppercase">
+            {role === 'admin' ? 'AD' : 'CL'}
+          </div>
+          <div className="overflow-hidden">
+            <p className="text-white text-[11px] font-black uppercase tracking-widest truncate">
+              {role === 'admin' ? 'Administrator' : 'Yanba Client'}
+            </p>
+            <p className="text-white/30 text-[9px] uppercase tracking-widest truncate">
+              {role === 'admin' ? 'admin@yanba.com' : 'Verified Member'}
+            </p>
+          </div>
         </div>
-        <span className="font-playfair text-xl font-bold text-white group-hover:text-gold-gradient transition-all">
-          YANBA
-        </span>
-      </Link>
+      </div>
 
-      {/* Nav */}
-      <nav className="flex-1 py-8 overflow-y-auto space-y-1 px-4 relative z-10 custom-scrollbar">
-        <p className="text-[10px] uppercase tracking-ultra text-[var(--gold)]/60 px-4 mb-6 font-bold">
-          {role === "admin" ? t("admin.title") : t("account.title")}
+      {/* Navigation */}
+      <nav className="flex-1 py-4 overflow-y-auto px-4 relative z-10 custom-scrollbar space-y-1">
+        <p className="text-[9px] uppercase tracking-[0.3em] text-[var(--gold)]/40 px-4 mb-6 font-black italic">
+          {role === "admin" ? (language === 'ar' ? 'الإدارة' : 'MANAGEMENT') : (language === 'ar' ? 'حسابي' : 'ACCOUNT')}
         </p>
         
         {items.map(item => {
@@ -64,42 +84,44 @@ export default function DashboardSidebar({ role = "admin" }: { role?: "admin" | 
             <Link
               key={item.href}
               href={item.href}
-              className={`flex items-center gap-4 px-4 py-3.5 rounded-2xl transition-all duration-300 group relative ${
+              onClick={onClose}
+              className={`flex items-center gap-4 px-5 py-4 rounded-2xl transition-all duration-500 group relative ${
                 isActive ? "text-black" : "text-white/40 hover:text-white"
               }`}
             >
               {isActive ? (
                 <motion.div
-                  layoutId="sidebar-active"
-                  className="absolute inset-0 rounded-2xl bg-gold-gradient shadow-[0_4px_20px_rgba(245,211,138,0.2)]"
+                  layoutId="sidebar-active-pill"
+                  className="absolute inset-0 rounded-2xl bg-gold-gradient shadow-xl"
                   initial={false}
                   transition={{ type: "spring", stiffness: 300, damping: 30 }}
                 />
               ) : (
-                <div className="absolute inset-0 rounded-2xl border border-transparent group-hover:border-[var(--gold)]/20 bg-white/0 group-hover:bg-white/[0.02] transition-colors" />
+                <div className="absolute inset-0 rounded-2xl border border-transparent group-hover:border-white/5 bg-white/0 group-hover:bg-white/[0.03] transition-all" />
               )}
               
-              <item.icon size={18} className="relative z-10 flex-shrink-0" />
-              <span className="relative z-10 text-[11px] uppercase tracking-widest font-bold">
+              <item.icon size={18} className={`relative z-10 transition-transform duration-500 ${!isActive && 'group-hover:scale-110 group-hover:rotate-6'}`} />
+              <span className="relative z-10 text-[11px] uppercase tracking-[0.2em] font-black">
                 {item.label}
               </span>
+              {!isActive && (
+                <ChevronRight size={14} className="relative z-10 ml-auto opacity-0 group-hover:opacity-100 transition-all -translate-x-2 group-hover:translate-x-0" />
+              )}
             </Link>
           );
         })}
       </nav>
 
-      {/* Bottom Actions */}
-      <div className="p-6 relative z-10 space-y-3">
-        <div className="h-px w-full bg-[var(--border-subtle)] mb-6" />
-        
-        <Link href="/store" className="flex items-center justify-center gap-3 px-4 py-4 rounded-xl text-[10px] uppercase tracking-widest font-bold border border-[var(--border-subtle)] text-white/50 hover:text-[var(--gold)] hover:border-[var(--gold)]/50 transition-all group glass-panel">
-          <Globe size={16} className="group-hover:rotate-12 transition-transform" />
+      {/* Logout & Store Area */}
+      <div className="p-6 relative z-10 space-y-4 border-t border-white/5 bg-black/20">
+        <Link href="/store" className="flex items-center justify-center gap-3 px-4 py-4 rounded-2xl text-[10px] uppercase tracking-widest font-black text-white/30 hover:text-[var(--gold)] hover:bg-white/5 transition-all group">
+          <Globe size={16} className="group-hover:rotate-90 transition-transform duration-700" />
           {t("dash.returnToStore")}
         </Link>
         
         <button
           onClick={async () => { await signOut(); }}
-          className="flex items-center justify-center gap-3 px-4 py-4 rounded-xl text-[10px] uppercase tracking-widest font-bold bg-white/[0.02] border border-[var(--border-subtle)] text-[#EF4444] hover:bg-[#EF4444] hover:text-white hover:border-[#EF4444] transition-all"
+          className="w-full flex items-center justify-center gap-3 px-4 py-4 rounded-2xl text-[10px] uppercase tracking-widest font-black bg-[#ff3b3b]/10 border border-[#ff3b3b]/20 text-[#ff3b3b] hover:bg-[#ff3b3b] hover:text-white transition-all shadow-lg"
         >
           <LogOut size={16} />
           {t("nav.logout")}

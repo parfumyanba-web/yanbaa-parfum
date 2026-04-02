@@ -1,117 +1,197 @@
 "use client";
 
 import React, { useState } from "react";
-import { motion } from "framer-motion";
-import { User, Lock, Save, Eye, EyeOff } from "lucide-react";
-import Link from "next/link";
+import { motion, AnimatePresence } from "framer-motion";
+import { User, Lock, Save, Eye, EyeOff, ShieldCheck, Mail, Phone, Briefcase, UserCircle } from "lucide-react";
 import { useLanguage } from "@/context/LanguageContext";
-import DashboardSidebar from "@/components/dashboard/Sidebar";
 
 export default function ProfilePage() {
-  const { t, dir } = useLanguage();
+  const { t, language, dir } = useLanguage();
   const [showOld, setShowOld] = useState(false);
   const [showNew, setShowNew] = useState(false);
   const [activeTab, setActiveTab] = useState<"info" | "password">("info");
-  const [saved, setSaved] = useState(false);
+  const [saving, setSaving] = useState(false);
 
   const handleSave = (e: React.FormEvent) => {
     e.preventDefault();
-    setSaved(true);
-    setTimeout(() => setSaved(false), 2000);
+    setSaving(true);
+    setTimeout(() => setSaving(false), 2000);
   };
 
-  const inputClass = "w-full bg-white/5 border border-white/10 py-3.5 px-4 text-sm text-white transition-all";
-
   return (
-    <div dir={dir} className="flex min-h-screen bg-[#0a0a0a]">
-      <DashboardSidebar role="client" />
-      <main className="flex-1 lg:ml-64 px-6 md:px-12 py-12 pt-20">
-        <div className="max-w-2xl mx-auto space-y-10">
-          {/* Header */}
-          <div>
-            <h1 className="font-playfair text-4xl text-white mb-2">{t("account.profile.title")}</h1>
-            <p className="text-white/30 text-[11px] uppercase tracking-widest">{t("dash.profile")}</p>
-          </div>
+    <div className="space-y-8 pb-20">
+      {/* Header Area */}
+      <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-6 mb-12">
+        <div>
+          <motion.div 
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            className="flex items-center gap-2 mb-3"
+          >
+            <span className="w-8 h-[1px] bg-[var(--gold)]" />
+            <span className="text-[10px] tracking-[0.4em] text-[var(--gold)] uppercase font-black">
+              {t("dash.profile")}
+            </span>
+          </motion.div>
+          <h1 className="text-4xl md:text-5xl font-playfair text-white italic">
+            Identity <span className="text-gold-gradient non-italic font-bold">Studio✦</span>
+          </h1>
+        </div>
 
-          {/* Tabs */}
-          <div className="flex gap-1 bg-white/5 p-1 border border-white/10">
-            {(["info", "password"] as const).map(tab => (
-              <button key={tab} onClick={() => setActiveTab(tab)}
-                className={`flex-1 py-3 text-xs uppercase tracking-widest font-bold transition-all duration-200 ${
-                  activeTab === tab ? "bg-[#D4AF37] text-black" : "text-white/40 hover:text-white"
-                }`}>
-                {tab === "info" ? t("account.profile.edit") : t("account.profile.changePass")}
-              </button>
-            ))}
-          </div>
-
-          {/* Info Tab */}
-          {activeTab === "info" && (
-            <motion.form
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              onSubmit={handleSave}
-              className="space-y-5 bg-white/[0.03] border border-white/10 p-8"
+        <div className="flex p-1 bg-white/5 rounded-2xl border border-white/5">
+          {(["info", "password"] as const).map(tab => (
+            <button 
+              key={tab} 
+              onClick={() => setActiveTab(tab)}
+              className={`px-6 py-2.5 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all duration-300 ${
+                activeTab === tab ? "bg-gold-gradient text-black shadow-lg shadow-[var(--gold)]/20" : "text-white/30 hover:text-white"
+              }`}
             >
-              <div className="space-y-2">
-                <label className="text-[11px] uppercase tracking-widest text-white/50">{t("auth.fullName")}</label>
-                <input type="text" className={inputClass} placeholder={t("auth.fullName")} />
-              </div>
-              <div className="space-y-2">
-                <label className="text-[11px] uppercase tracking-widest text-white/50">{t("auth.storeName")}</label>
-                <input type="text" className={inputClass} placeholder={t("auth.storeName")} />
-              </div>
-              <div className="space-y-2">
-                <label className="text-[11px] uppercase tracking-widest text-white/50">{t("auth.phone")}</label>
-                <input type="tel" className={inputClass} placeholder="+213..." />
-              </div>
-              <div className="space-y-2">
-                <label className="text-[11px] uppercase tracking-widest text-white/50">{t("auth.email")}</label>
-                <input type="email" className={inputClass} placeholder={t("auth.email")} />
-              </div>
-              <button type="submit"
-                className="flex items-center gap-2 px-8 py-3.5 text-xs font-bold uppercase tracking-widest transition-all duration-200"
-                style={{ background: "linear-gradient(135deg, #D4AF37, #A88820)", color: "#0a0a0a" }}>
-                <Save size={14} />
-                {saved ? "✓" : t("account.profile.save")}
-              </button>
-            </motion.form>
-          )}
+              {tab === "info" ? t("account.profile.edit") : t("account.profile.changePass")}
+            </button>
+          ))}
+        </div>
+      </div>
 
-          {/* Password Tab */}
-          {activeTab === "password" && (
-            <motion.form
-              initial={{ opacity: 0, y: 10 }}
+      <div className="max-w-4xl">
+        <AnimatePresence mode="wait">
+          {activeTab === "info" ? (
+            <motion.div
+              key="info"
+              initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              onSubmit={handleSave}
-              className="space-y-5 bg-white/[0.03] border border-white/10 p-8"
+              exit={{ opacity: 0, y: -20 }}
+              className="grid grid-cols-1 md:grid-cols-2 gap-8"
             >
-              {[
-                { label: t("auth.password"), show: showOld, setShow: setShowOld, name: "oldPass" },
-                { label: t("auth.confirmPassword"), show: showNew, setShow: setShowNew, name: "newPass" },
-              ].map(({ label, show, setShow, name }) => (
-                <div key={name} className="space-y-2">
-                  <label className="text-[11px] uppercase tracking-widest text-white/50">{label}</label>
-                  <div className="relative">
-                    <input type={show ? "text" : "password"} name={name}
-                      className="w-full bg-white/5 border border-white/10 py-3.5 px-4 text-sm text-white transition-all pr-12" />
-                    <button type="button" onClick={() => setShow(p => !p)}
-                      className="absolute top-1/2 -translate-y-1/2 right-4 text-white/30 hover:text-white transition-colors">
-                      {show ? <EyeOff size={16} /> : <Eye size={16} />}
-                    </button>
+              {/* Personal Info */}
+              <div className="glass-card border-white/5 p-8 space-y-8">
+                <div className="flex items-center gap-3 border-b border-white/5 pb-6">
+                  <UserCircle size={20} className="text-[var(--gold)]" />
+                  <span className="text-[10px] font-black uppercase tracking-ultra text-white/20">Legal Representative</span>
+                </div>
+
+                <div className="space-y-6">
+                  <div className="group space-y-2">
+                    <label className="text-[10px] uppercase tracking-widest text-white/30 font-black group-focus-within:text-[var(--gold)] transition-colors">
+                      {t("auth.fullName")}
+                    </label>
+                    <div className="relative">
+                      <div className="absolute left-4 top-1/2 -translate-y-1/2 text-white/20">
+                        <User size={14} />
+                      </div>
+                      <input type="text" className="w-full bg-black/20 border border-white/5 py-4 pl-12 pr-6 rounded-xl text-sm text-white focus:border-[var(--gold)]/30 transition-all outline-none" placeholder={t("auth.fullName")} />
+                    </div>
+                  </div>
+
+                  <div className="group space-y-2">
+                    <label className="text-[10px] uppercase tracking-widest text-white/30 font-black group-focus-within:text-[var(--gold)] transition-colors">
+                      {t("auth.email")}
+                    </label>
+                    <div className="relative">
+                      <div className="absolute left-4 top-1/2 -translate-y-1/2 text-white/20">
+                        <Mail size={14} />
+                      </div>
+                      <input type="email" className="w-full bg-black/20 border border-white/5 py-4 pl-12 pr-6 rounded-xl text-sm text-white focus:border-[var(--gold)]/30 transition-all outline-none" placeholder={t("auth.email")} />
+                    </div>
                   </div>
                 </div>
-              ))}
-              <button type="submit"
-                className="flex items-center gap-2 px-8 py-3.5 text-xs font-bold uppercase tracking-widest transition-all duration-200"
-                style={{ background: "linear-gradient(135deg, #D4AF37, #A88820)", color: "#0a0a0a" }}>
-                <Lock size={14} />
-                {saved ? "✓" : t("account.profile.save")}
-              </button>
-            </motion.form>
+              </div>
+
+              {/* Business Info */}
+              <div className="glass-card border-white/5 p-8 space-y-8">
+                <div className="flex items-center gap-3 border-b border-white/5 pb-6">
+                  <Briefcase size={20} className="text-[var(--gold)]" />
+                  <span className="text-[10px] font-black uppercase tracking-ultra text-white/20">Enterprise Details</span>
+                </div>
+
+                <div className="space-y-6">
+                  <div className="group space-y-2">
+                    <label className="text-[10px] uppercase tracking-widest text-white/30 font-black group-focus-within:text-[var(--gold)] transition-colors">
+                      {t("auth.storeName")}
+                    </label>
+                    <input type="text" className="w-full bg-black/20 border border-white/5 py-4 px-6 rounded-xl text-sm text-white focus:border-[var(--gold)]/30 transition-all outline-none" placeholder={t("auth.storeName")} />
+                  </div>
+
+                  <div className="group space-y-2">
+                    <label className="text-[10px] uppercase tracking-widest text-white/30 font-black group-focus-within:text-[var(--gold)] transition-colors">
+                      {t("auth.phone")}
+                    </label>
+                    <div className="relative">
+                      <div className="absolute left-4 top-1/2 -translate-y-1/2 text-white/20">
+                        <Phone size={14} />
+                      </div>
+                      <input type="tel" className="w-full bg-black/20 border border-white/5 py-4 pl-12 pr-6 rounded-xl text-sm text-white focus:border-[var(--gold)]/30 transition-all outline-none" placeholder="+213..." />
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div className="md:col-span-2 flex justify-center pt-4">
+                <button 
+                  onClick={handleSave}
+                  className="h-14 px-12 rounded-2xl bg-gold-gradient flex items-center justify-center gap-3 text-black shadow-lg shadow-[var(--gold)]/20 hover:scale-105 active:scale-95 transition-all text-xs font-black uppercase tracking-widest disabled:opacity-50"
+                >
+                  <Save size={18} />
+                  {saving ? (language === 'ar' ? 'جاري الحفظ...' : 'SAVING...') : (language === 'ar' ? 'حفظ التغييرات' : 'SAVE CHANGES')}
+                </button>
+              </div>
+            </motion.div>
+          ) : (
+            <motion.div
+              key="password"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -20 }}
+              className="max-w-xl mx-auto glass-card border-white/5 p-8 mt-12"
+            >
+               <div className="flex items-center gap-3 border-b border-white/5 pb-6 mb-8">
+                  <Lock size={20} className="text-[var(--gold)]" />
+                  <span className="text-[10px] font-black uppercase tracking-ultra text-white/20">Security Layer</span>
+                </div>
+
+                <div className="space-y-6">
+                  <div className="group space-y-2">
+                    <label className="text-[10px] uppercase tracking-widest text-white/30 font-black group-focus-within:text-[var(--gold)] transition-colors">
+                      {t("auth.password")}
+                    </label>
+                    <div className="relative">
+                      <input 
+                        type={showOld ? "text" : "password"} 
+                        className="w-full bg-black/20 border border-white/5 py-4 px-6 rounded-xl text-sm text-white focus:border-[var(--gold)]/30 transition-all outline-none" 
+                      />
+                      <button onClick={() => setShowOld(!showOld)} className="absolute right-4 top-1/2 -translate-y-1/2 text-white/20 hover:text-white transition-colors">
+                        {showOld ? <EyeOff size={16} /> : <Eye size={16} />}
+                      </button>
+                    </div>
+                  </div>
+
+                  <div className="group space-y-2">
+                    <label className="text-[10px] uppercase tracking-widest text-white/30 font-black group-focus-within:text-[var(--gold)] transition-colors">
+                      {t("auth.confirmPassword")}
+                    </label>
+                    <div className="relative">
+                      <input 
+                        type={showNew ? "text" : "password"} 
+                        className="w-full bg-black/20 border border-white/5 py-4 px-6 rounded-xl text-sm text-white focus:border-[var(--gold)]/30 transition-all outline-none" 
+                      />
+                       <button onClick={() => setShowNew(!showNew)} className="absolute right-4 top-1/2 -translate-y-1/2 text-white/20 hover:text-white transition-colors">
+                        {showNew ? <EyeOff size={16} /> : <Eye size={16} />}
+                      </button>
+                    </div>
+                  </div>
+
+                  <button 
+                    onClick={handleSave}
+                    className="w-full h-14 rounded-2xl bg-gold-gradient flex items-center justify-center gap-3 text-black shadow-lg shadow-[var(--gold)]/20 hover:scale-105 active:scale-95 transition-all text-xs font-black uppercase tracking-widest mt-8"
+                  >
+                    <ShieldCheck size={18} />
+                    {saving ? 'UPDATING...' : 'UPDATE SECURITY KEY'}
+                  </button>
+                </div>
+            </motion.div>
           )}
-        </div>
-      </main>
+        </AnimatePresence>
+      </div>
     </div>
   );
 }

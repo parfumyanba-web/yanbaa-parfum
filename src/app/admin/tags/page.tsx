@@ -1,19 +1,19 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import DashboardSidebar from "@/components/dashboard/Sidebar";
 import { createClient } from "@/utils/supabase/client";
-import { Tag, Plus, Trash2 } from "lucide-react";
+import { Tag, Plus, Info, Database, Sparkles } from "lucide-react";
+import { motion } from "framer-motion";
+import { useLanguage } from "@/context/LanguageContext";
 
-export default function AdminTagsClient() {
+export default function AdminTagsPage() {
+  const { t, language, dir } = useLanguage();
   const [tags, setTags] = useState<string[]>([]);
   const [loading, setLoading] = useState(true);
-  const [newTag, setNewTag] = useState("");
 
   const fetchTags = async () => {
     setLoading(true);
     const supabase = createClient();
-    // Unique tags from products
     const { data } = await supabase.from("products").select("tags");
     
     if (data) {
@@ -33,38 +33,97 @@ export default function AdminTagsClient() {
   }, []);
 
   return (
-    <div dir="rtl" className="flex min-h-screen bg-[#0a0a0a]">
-      <DashboardSidebar role="admin" />
-      <main className="flex-1 lg:mr-60 p-6 md:p-12 pt-20">
-        <div className="max-w-3xl mx-auto">
-          {/* Header */}
-          <div className="mb-10">
-            <h1 className="font-playfair text-4xl text-white mb-2">إدارة العلامات (Tags)</h1>
-            <p className="text-white/30 text-[11px] uppercase tracking-widest text-right">العلامات المستخدمة في المنتجات وعرض الصفحة الرئيسية</p>
+    <div className="space-y-8 pb-20">
+      {/* Header Area */}
+      <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-6 mb-12">
+        <div>
+          <motion.div 
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            className="flex items-center gap-2 mb-3"
+          >
+            <span className="w-8 h-[1px] bg-[var(--gold)]" />
+            <span className="text-[10px] tracking-[0.4em] text-[var(--gold)] uppercase font-black">
+              {language === 'ar' ? 'تصنيفات العطور' : 'FRAGRANCE TAXONOMY'}
+            </span>
+          </motion.div>
+          <h1 className="text-4xl md:text-5xl font-playfair text-white italic">
+            Visual <span className="text-gold-gradient non-italic font-bold">Tags✦</span>
+          </h1>
+        </div>
+      </div>
+
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        {/* Info Card */}
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="lg:col-span-1 glass-card border-white/5 p-8 flex flex-col gap-6"
+        >
+          <div className="w-12 h-12 rounded-2xl bg-gold-gradient flex items-center justify-center text-black">
+            <Info size={24} />
           </div>
-
-          <div className="bg-white/[0.03] border border-white/10 p-8">
-            <p className="text-sm text-white/60 leading-relaxed mb-6">
-              يتم إنشاء العلامات تلقائياً عند إضافتها لأي منتج في قسم <strong>إدارة المنتجات</strong>. أي علامة تُضاف لمنتج (مثل: <span className="text-[#D4AF37]">"وصل حديثاً"</span> أو <span className="text-[#D4AF37]">"الأكثر مبيعاً"</span>) ستظهر هنا وتُعرض في الصفحة الرئيسية ديناميكياً.
+          <div>
+            <h3 className="text-xl font-playfair text-white mb-2 italic">How it works</h3>
+            <p className="text-sm text-white/40 leading-relaxed font-inter uppercase tracking-wide text-[10px] font-black italic">
+              {language === 'ar' 
+                ? 'يتم إنشاء العلامات تلقائياً عند إضافتها لأي منتج. أي علامة تُضاف لمنتج ستظهر هنا وتُعرض في المتجر ديناميكياً.'
+                : 'Tags are generated automatically when added to any product. Any tag added to a product will appear here and in the store dynamically.'}
             </p>
-
-            <div className="flex flex-wrap gap-3">
-              {loading ? (
-                <span className="text-white/30 text-sm">جاري جلب العلامات...</span>
-              ) : tags.length === 0 ? (
-                <span className="text-white/30 text-sm">لا توجد أي علامات مستخدمة حالياً في المنتجات.</span>
-              ) : (
-                tags.map(tag => (
-                  <div key={tag} className="flex items-center gap-2 px-4 py-2 bg-white/5 border border-white/10 rounded-sm">
-                    <Tag size={14} className="text-[#D4AF37]" />
-                    <span className="text-sm font-bold text-white tracking-wide">{tag}</span>
-                  </div>
-                ))
-              )}
+          </div>
+          
+          <div className="flex items-center gap-4 p-4 rounded-xl bg-white/5 border border-white/5 opacity-50">
+            <Database size={20} className="text-[var(--gold)]" />
+            <div>
+              <p className="text-[10px] font-black uppercase text-white/40 tracking-widest">Total Active Tags</p>
+              <p className="text-2xl font-playfair text-white italic">{tags.length}</p>
             </div>
           </div>
-        </div>
-      </main>
+        </motion.div>
+
+        {/* Tag Cloud */}
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.1 }}
+          className="lg:col-span-2 glass-card border-white/5 p-8"
+        >
+          <div className="flex items-center justify-between mb-8">
+            <div className="flex items-center gap-3">
+              <Sparkles size={18} className="text-[var(--gold)]" />
+              <span className="text-[10px] font-black uppercase tracking-ultra text-white/20">Active Database</span>
+            </div>
+          </div>
+
+          <div className="flex flex-wrap gap-3">
+            {loading ? (
+              <div className="flex items-center gap-3 px-6 py-12 w-full justify-center opacity-20">
+                <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                <span className="text-[10px] font-black uppercase tracking-widest">Indexing catalog...</span>
+              </div>
+            ) : tags.length === 0 ? (
+              <div className="flex flex-col items-center gap-4 py-20 w-full opacity-10">
+                <Tag size={48} />
+                <span className="text-[10px] font-black uppercase tracking-widest text-center">No tags detected in product catalog</span>
+              </div>
+            ) : (
+              tags.map((tag, idx) => (
+                <motion.div 
+                  key={tag}
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ delay: idx * 0.03 }}
+                  className="group relative flex items-center gap-3 px-5 py-3 rounded-2xl bg-white/5 border border-white/5 glass-panel transition-all hover:bg-white/10 hover:border-[var(--gold)]/30 cursor-pointer"
+                >
+                  <Tag size={12} className="text-white/20 group-hover:text-[var(--gold)] transition-colors" />
+                  <span className="text-sm font-bold text-white/60 group-hover:text-white transition-colors">{tag}</span>
+                  <div className="absolute top-0 right-0 w-2 h-2 rounded-full bg-[var(--gold)] blur-[4px] opacity-0 group-hover:opacity-100 transition-opacity" />
+                </motion.div>
+              ))
+            )}
+          </div>
+        </motion.div>
+      </div>
     </div>
   );
 }

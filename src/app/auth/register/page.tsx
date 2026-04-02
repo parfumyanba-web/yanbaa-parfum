@@ -1,9 +1,9 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
-import { User, Store, Mail, Lock, Phone, ChevronDown, Eye, EyeOff, ArrowLeft, Sparkles } from "lucide-react";
+import { User, Store, Mail, Lock, Phone, ChevronDown, Eye, EyeOff, ArrowLeft, Sparkles, MapPin, Briefcase } from "lucide-react";
 import { register } from "@/actions/auth";
 import { useLanguage } from "@/context/LanguageContext";
 import { WILAYAS, getCommunesByWilaya } from "@/data/wilayas";
@@ -40,143 +40,188 @@ export default function RegisterPage() {
     }
   };
 
-  const inputClass = "w-full input-glass py-4 text-sm font-outfit transition-all placeholder:text-white/20 rounded-xl";
-  const iconStart = { [dir === 'rtl' ? 'right' : 'left']: "16px" };
-  const paddingStart = dir === 'rtl' ? { paddingRight: "48px", paddingLeft: "16px" } : { paddingLeft: "48px", paddingRight: "16px" };
-
-  const Field = ({ icon: Icon, label, name, type = "text", placeholder = "" }: any) => (
-    <div className="space-y-2">
-      <label className="text-[10px] uppercase tracking-widest text-white/50 font-bold">{label}</label>
-      <div className="relative">
-        <Icon className="absolute top-1/2 -translate-y-1/2 text-[var(--gold)]/50 pointer-events-none" style={iconStart} size={18} />
-        <input type={type} name={name} required placeholder={placeholder} className={inputClass} style={paddingStart} />
-      </div>
-    </div>
-  );
+  const inputClass = "w-full bg-white/5 border border-white/10 py-4 px-12 text-sm text-white rounded-2xl focus:border-[var(--gold)]/40 focus:bg-white/[0.08] transition-all outline-none";
 
   return (
-    <div className="min-h-screen bg-[var(--deep-bg)] flex" dir={dir}>
+    <div className="min-h-screen bg-[#070707] flex font-inter" dir={dir}>
       
-      {/* Left side: Visual Pane */}
-      <div className="hidden lg:flex w-1/2 relative overflow-hidden bg-gradient-to-br from-[#120f0d] to-[#09090b] items-center justify-center p-12">
-        <div className="absolute inset-0 bg-[var(--gold)]/5 blur-3xl" />
-        <div className="absolute top-0 left-0 w-full h-full bg-[url('/bg-texture.png')] opacity-10 mix-blend-overlay" />
+      {/* Left side: Visual Pane (Luxury Brand Image) */}
+      <div className="hidden lg:flex w-[45%] relative overflow-hidden bg-gradient-to-br from-[#0a0a0a] to-[#121212] items-center justify-center p-20 border-r border-white/5">
+        <div className="absolute inset-0 bg-gold-gradient opacity-[0.03] blur-[150px]" />
         
-        <div className="relative z-10 text-center max-w-lg">
-          <motion.div initial={{ scale: 0.8, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} transition={{ duration: 1 }} className="mb-8 flex justify-center">
-            <div className="w-24 h-24 rounded-full border border-[var(--gold)] flex items-center justify-center bg-[var(--deep-bg)] shadow-[0_0_40px_rgba(245,211,138,0.2)]">
-              <span className="text-[var(--gold)] text-4xl font-bold font-outfit">Y</span>
+        <div className="relative z-10 text-center max-w-md">
+          <motion.div 
+            initial={{ scale: 0.9, opacity: 0 }} 
+            animate={{ scale: 1, opacity: 1 }} 
+            className="mb-12 flex justify-center"
+          >
+            <div className="w-28 h-28 rounded-full border border-white/10 flex items-center justify-center bg-white/5 backdrop-blur-xl relative group">
+               <div className="absolute inset-0 rounded-full bg-gold-gradient opacity-0 group-hover:opacity-20 transition-opacity blur-xl" />
+               <span className="text-[var(--gold)] text-5xl font-playfair font-bold">Y</span>
             </div>
           </motion.div>
           
-          <motion.h2 initial={{ y: 20, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ delay: 0.3 }} className="font-playfair text-5xl text-white mb-6 leading-tight">
-            {dir === 'rtl' ? "انضم إلى عالم الفخامة" : "Rejoignez l'univers du luxe"}
+          <motion.h2 
+            initial={{ y: 20, opacity: 0 }} 
+            animate={{ y: 0, opacity: 1 }} 
+            transition={{ delay: 0.2 }}
+            className="font-playfair text-5xl text-white mb-8 leading-tight italic"
+          >
+            Noble <span className="text-gold-gradient non-italic font-bold">Partnership✦</span>
           </motion.h2>
-          <motion.p initial={{ y: 20, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ delay: 0.5 }} className="text-white/50 text-lg font-outfit leading-relaxed">
-            {t("hero.subtitle2")}
+          <motion.p 
+            initial={{ y: 20, opacity: 0 }} 
+            animate={{ y: 0, opacity: 1 }} 
+            transition={{ delay: 0.4 }}
+            className="text-white/30 text-sm font-black uppercase tracking-[0.3em] leading-relaxed"
+          >
+            {language === 'ar' ? 'انضم إلى شبكتنا الحصرية من بائعي العطور الفاخرة' : 'Join our exclusive network of luxury fragrance partners'}
           </motion.p>
         </div>
 
-        {/* Decorative elements */}
-        <motion.div animate={{ rotate: 360 }} transition={{ duration: 50, repeat: Infinity, ease: "linear" }} className="absolute -bottom-1/4 -left-1/4 w-[600px] h-[600px] border border-[var(--border-subtle)] rounded-full border-dashed opacity-20" />
-        <motion.div animate={{ rotate: -360 }} transition={{ duration: 40, repeat: Infinity, ease: "linear" }} className="absolute -top-1/4 -right-1/4 w-[800px] h-[800px] border border-[var(--border-subtle)] rounded-full opacity-20" />
+        <div className="absolute bottom-12 left-1/2 -translate-x-1/2 text-[10px] text-white/10 font-bold uppercase tracking-[0.5em]">
+          Yanba Fine Fragrances © 2026
+        </div>
       </div>
 
       {/* Right side: Form Pane */}
-      <div className="w-full lg:w-1/2 flex items-center justify-center p-6 md:p-12 lg:p-24 relative overflow-y-auto">
-        <Link href="/" className="absolute top-8 left-8 flex items-center gap-2 text-white/40 hover:text-[var(--gold)] text-[10px] font-bold uppercase tracking-widest transition-colors group z-10 glass-panel px-4 py-2 rounded-full">
-          <ArrowLeft size={14} className="group-hover:-translate-x-1 transition-transform rtl:rotate-180" />
-          {t("nav.home")}
+      <div className="w-full lg:w-[55%] flex items-center justify-center p-6 md:p-16 lg:p-24 relative overflow-y-auto">
+        <Link 
+          href="/" 
+          className="absolute top-12 left-12 flex items-center gap-2 text-white/20 hover:text-white transition-all group z-10"
+        >
+          <div className="w-8 h-8 rounded-lg bg-white/5 flex items-center justify-center group-hover:bg-white/10">
+            <ArrowLeft size={14} className="rtl:rotate-180" />
+          </div>
+          <span className="text-[10px] font-black uppercase tracking-widest">{t("nav.home")}</span>
         </Link>
 
-        <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.6 }} className="w-full max-w-[480px]">
-          
-          <div className="mb-10 lg:hidden text-center flex flex-col items-center">
-            <div className="w-16 h-16 rounded-full border border-[var(--gold)] flex items-center justify-center bg-[var(--deep-bg)] mb-6">
-              <span className="text-[var(--gold)] text-2xl font-bold font-outfit">Y</span>
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }} 
+          animate={{ opacity: 1, y: 0 }} 
+          className="w-full max-w-[540px] space-y-12"
+        >
+          <div>
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[var(--gold)]/10 border border-[var(--gold)]/20 mb-6 font-black uppercase tracking-widest text-[9px] text-[var(--gold)]">
+              <Sparkles size={12} /> B2B Portal
             </div>
-            <h1 className="font-playfair text-3xl text-white">{t("auth.register")}</h1>
-          </div>
-          
-          <div className="hidden lg:block mb-10">
-            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-[var(--gold)]/30 bg-[var(--gold)]/5 mb-6 text-[9px] uppercase tracking-widest text-[var(--gold)] font-bold">
-              <Sparkles size={12} /> {t("nav.account")}
-            </div>
-            <h1 className="font-playfair text-4xl text-white">{t("auth.register")}</h1>
+            <h1 className="text-4xl font-playfair text-white italic">{t("auth.register")}</h1>
+            <p className="text-white/20 text-[10px] font-black uppercase tracking-[0.2em] mt-2">Initialize your professional account</p>
           </div>
 
-          <form onSubmit={handleSubmit} className="space-y-6 relative z-10">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <Field icon={User} label={t("auth.fullName")} name="fullName" placeholder="" />
-              <Field icon={Store} label={t("auth.storeName")} name="businessName" placeholder="" />
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <Field icon={Mail} label={t("auth.email")} name="email" type="email" />
-              <Field icon={Phone} label={t("auth.phone")} name="phone" type="tel" />
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <form onSubmit={handleSubmit} className="space-y-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
               <div className="space-y-2">
-                <label className="text-[10px] uppercase tracking-widest text-white/50 font-bold">{t("auth.wilaya")}</label>
+                <label className="text-[9px] uppercase tracking-widest text-white/30 font-black px-1">{t("auth.fullName")}</label>
                 <div className="relative">
-                  <ChevronDown className="absolute top-1/2 -translate-y-1/2 text-[var(--gold)] pointer-events-none" style={{ [dir === 'rtl' ? 'left' : 'right']: '16px' }} size={16} />
-                  <select name="wilaya" required value={selectedWilaya} onChange={e => setSelectedWilaya(e.target.value)} className="w-full appearance-none input-glass py-4 px-4 text-sm rounded-xl cursor-pointer">
-                    <option value="" className="bg-[#111] text-white/30">{t("auth.selectWilaya")}</option>
+                  <User className="absolute left-4 top-1/2 -translate-y-1/2 text-white/20" size={16} />
+                  <input type="text" name="fullName" required className={inputClass} placeholder="Full Name" />
+                </div>
+              </div>
+              <div className="space-y-2">
+                <label className="text-[9px] uppercase tracking-widest text-white/30 font-black px-1">{t("auth.storeName")}</label>
+                <div className="relative">
+                  <Briefcase className="absolute left-4 top-1/2 -translate-y-1/2 text-white/20" size={16} />
+                  <input type="text" name="businessName" required className={inputClass} placeholder="Entity Name" />
+                </div>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+              <div className="space-y-2">
+                <label className="text-[9px] uppercase tracking-widest text-white/30 font-black px-1">{t("auth.phone")}</label>
+                <div className="relative">
+                  <Phone className="absolute left-4 top-1/2 -translate-y-1/2 text-white/20" size={16} />
+                  <input type="tel" name="phone" required className={inputClass} placeholder="+213..." />
+                </div>
+              </div>
+              <div className="space-y-2">
+                <label className="text-[9px] uppercase tracking-widest text-white/30 font-black px-1">{t("auth.address")}</label>
+                <div className="relative">
+                  <MapPin className="absolute left-4 top-1/2 -translate-y-1/2 text-white/20" size={16} />
+                  <input type="text" name="address" required className={inputClass} placeholder="Full Physical Address" />
+                </div>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+              <div className="space-y-2">
+                <label className="text-[9px] uppercase tracking-widest text-white/30 font-black px-1">{t("auth.wilaya")}</label>
+                <div className="relative">
+                  <select 
+                    name="wilaya" 
+                    required 
+                    value={selectedWilaya} 
+                    onChange={e => setSelectedWilaya(e.target.value)} 
+                    className="w-full bg-white/5 border border-white/10 py-4 px-6 text-sm text-white rounded-2xl appearance-none outline-none focus:border-[var(--gold)]/40 transition-all cursor-pointer"
+                  >
+                    <option value="" className="bg-[#111]">{t("auth.selectWilaya")}</option>
                     {WILAYAS.map(w => <option key={w.code} value={w.code} className="bg-[#111]">{language === "ar" ? `${w.code} - ${w.ar}` : `${w.code} - ${w.fr}`}</option>)}
                   </select>
+                  <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 text-white/20 pointer-events-none" size={16} />
                 </div>
               </div>
 
               <div className="space-y-2">
-                <label className="text-[10px] uppercase tracking-widest text-white/50 font-bold">{t("auth.commune")}</label>
+                <label className="text-[9px] uppercase tracking-widest text-white/30 font-black px-1">{t("auth.commune")}</label>
                 <div className="relative">
-                  <ChevronDown className="absolute top-1/2 -translate-y-1/2 text-[var(--gold)] pointer-events-none" style={{ [dir === 'rtl' ? 'left' : 'right']: '16px' }} size={16} />
-                  <select name="commune" required disabled={!selectedWilaya} className="w-full appearance-none input-glass py-4 px-4 text-sm rounded-xl cursor-pointer disabled:opacity-40">
-                    <option value="" className="bg-[#111] text-white/30">{t("auth.selectCommune")}</option>
+                  <select 
+                    name="commune" 
+                    required 
+                    disabled={!selectedWilaya} 
+                    className="w-full bg-white/5 border border-white/10 py-4 px-6 text-sm text-white rounded-2xl appearance-none outline-none focus:border-[var(--gold)]/40 transition-all cursor-pointer disabled:opacity-20"
+                  >
+                    <option value="" className="bg-[#111]">{t("auth.selectCommune")}</option>
                     {communes.map(c => <option key={c.value} value={c.value} className="bg-[#111]">{c.label}</option>)}
                   </select>
+                  <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 text-white/20 pointer-events-none" size={16} />
                 </div>
               </div>
             </div>
 
-            <div className="space-y-2">
-              <label className="text-[10px] uppercase tracking-widest text-white/50 font-bold">{t("auth.password")}</label>
-              <div className="relative">
-                <Lock className="absolute top-1/2 -translate-y-1/2 text-[var(--gold)]/50 pointer-events-none" style={iconStart} size={18} />
-                <input type={showPass ? "text" : "password"} name="password" required className={inputClass} style={{ paddingInlineStart: "48px", paddingInlineEnd: "48px" }} />
-                <button type="button" onClick={() => setShowPass(p => !p)} className="absolute top-1/2 -translate-y-1/2 text-white/30 hover:text-[var(--gold)] transition-colors" style={{ [dir === 'rtl' ? 'left' : 'right']: '16px' }}>
-                  {showPass ? <EyeOff size={18} /> : <Eye size={18} />}
-                </button>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+              <div className="space-y-2">
+                <label className="text-[9px] uppercase tracking-widest text-white/30 font-black px-1">{t("auth.password")}</label>
+                <div className="relative">
+                  <Lock className="absolute left-4 top-1/2 -translate-y-1/2 text-white/20" size={16} />
+                  <input type={showPass ? "text" : "password"} name="password" required className={inputClass} />
+                  <button type="button" onClick={() => setShowPass(!showPass)} className="absolute right-4 top-1/2 -translate-y-1/2 text-white/20 hover:text-white transition-colors">
+                    {showPass ? <EyeOff size={16} /> : <Eye size={16} />}
+                  </button>
+                </div>
+              </div>
+              <div className="space-y-2">
+                <label className="text-[9px] uppercase tracking-widest text-white/30 font-black px-1">{t("auth.confirmPassword")}</label>
+                <div className="relative">
+                  <Lock className="absolute left-4 top-1/2 -translate-y-1/2 text-white/20" size={16} />
+                  <input type={showConfirm ? "text" : "password"} name="confirmPassword" required className={inputClass} />
+                  <button type="button" onClick={() => setShowConfirm(!showConfirm)} className="absolute right-4 top-1/2 -translate-y-1/2 text-white/20 hover:text-white transition-colors">
+                    {showConfirm ? <EyeOff size={16} /> : <Eye size={16} />}
+                  </button>
+                </div>
               </div>
             </div>
 
-            <div className="space-y-2">
-              <label className="text-[10px] uppercase tracking-widest text-white/50 font-bold">{t("auth.confirmPassword")}</label>
-              <div className="relative">
-                <Lock className="absolute top-1/2 -translate-y-1/2 text-[var(--gold)]/50 pointer-events-none" style={iconStart} size={18} />
-                <input type={showConfirm ? "text" : "password"} name="confirmPassword" required className={inputClass} style={{ paddingInlineStart: "48px", paddingInlineEnd: "48px" }} />
-                <button type="button" onClick={() => setShowConfirm(p => !p)} className="absolute top-1/2 -translate-y-1/2 text-white/30 hover:text-[var(--gold)] transition-colors" style={{ [dir === 'rtl' ? 'left' : 'right']: '16px' }}>
-                  {showConfirm ? <EyeOff size={18} /> : <Eye size={18} />}
-                </button>
-              </div>
-            </div>
+            <AnimatePresence>
+              {error && (
+                <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} className="text-red-400 text-[10px] font-black uppercase tracking-widest bg-red-400/10 border border-red-400/20 px-6 py-4 rounded-xl">
+                  {error}
+                </motion.div>
+              )}
+            </AnimatePresence>
 
-            {error && (
-              <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: "auto" }} className="text-red-400 text-xs bg-red-400/10 border border-red-400/20 px-4 py-3 rounded-xl flex items-center gap-2">
-                <div className="w-1 h-4 bg-red-400 rounded-full" />
-                {error}
-              </motion.div>
-            )}
-
-            <button type="submit" disabled={isLoading} className="w-full py-4 rounded-xl font-bold text-[11px] uppercase tracking-[0.2em] transition-all duration-300 mt-4 disabled:opacity-50 hover:scale-[1.02] shadow-[0_8px_30px_rgba(245,211,138,0.2)] bg-gold-gradient text-black">
-              {isLoading ? t("common.loading") : t("auth.submit.register")}
+            <button 
+              type="submit" 
+              disabled={isLoading} 
+              className="w-full h-16 rounded-2xl bg-gold-gradient text-black font-black uppercase tracking-[0.2em] text-[11px] shadow-lg shadow-[var(--gold)]/20 hover:scale-[1.02] active:scale-[0.98] transition-all disabled:opacity-50"
+            >
+              {isLoading ? 'Processing Access...' : t("auth.submit.register")}
             </button>
           </form>
 
-          <p className="mt-8 text-center text-[11px] text-white/50 font-outfit uppercase tracking-wider">
+          <p className="text-center text-[10px] font-black uppercase tracking-[0.2em] text-white/20">
             {t("auth.haveAccount")}{" "}
-            <Link href="/auth/login" className="text-[var(--gold)] hover:text-white font-bold transition-colors">
+            <Link href="/auth/login" className="text-[var(--gold)] hover:text-white transition-colors">
               {t("auth.login")}
             </Link>
           </p>

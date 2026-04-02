@@ -8,9 +8,10 @@
   --gold-dark: #BFA054;
   --gold-glow: rgba(245, 211, 138, 0.4);
   
-  --deep-bg: #09090b;
-  --surface-1: rgba(255, 255, 255, 0.02);
-  --surface-2: rgba(255, 255, 255, 0.04);
+  --deep-bg: #0a0a0a;
+  --surface-1: rgba(255, 255, 255, 0.03);
+  --surface-2: rgba(255, 255, 255, 0.06);
+  --surface-3: rgba(255, 255, 255, 0.1);
   
   --border-subtle: rgba(255, 255, 255, 0.05);
   --border-strong: rgba(255, 255, 255, 0.1);
@@ -126,10 +127,19 @@ body.modal-open {
 }
 
 .glass-nav {
-  background: rgba(9, 9, 11, 0.7);
+  background: rgba(10, 10, 10, 0.8);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
   border-bottom: 1px solid var(--border-subtle);
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
+}
+
+.glass-card {
+  background: rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 24px;
 }
 
 /* ─── Shiny Gold Utilities ─── */
@@ -211,9 +221,25 @@ body.modal-open {
 ::-webkit-scrollbar-thumb { background: var(--border-subtle); border-radius: 4px; }
 ::-webkit-scrollbar-thumb:hover { background: var(--gold-dark); }
 
-::selection {
-  background: rgba(245, 211, 138, 0.2);
-  color: var(--gold-light);
+/* ─── Animations ─── */
+@keyframes marquee {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+[dir="rtl"] @keyframes marquee {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(50%); }
+}
+
+.animate-marquee {
+  animation: marquee 30s linear infinite;
+  display: flex;
+  width: max-content;
+}
+
+.animate-marquee:hover {
+  animation-play-state: paused;
 }
 
 [dir="rtl"] .ltr-only { display: none; }

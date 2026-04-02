@@ -1,11 +1,11 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 import { createClient } from "@/utils/supabase/client";
 
 export default function AnnouncementBar() {
-  const [settings, setSettings] = useState<{ text: string, active: boolean } | null>(null);
+  const [text, setText] = useState<string | null>(null);
   const supabase = createClient();
 
   useEffect(() => {
@@ -13,22 +13,21 @@ export default function AnnouncementBar() {
       const { data } = await supabase
         .from("cms_settings")
         .select("value")
-        .eq("key", "announcement_bar")
+        .eq("key", "announcement")
         .single();
       
       if (data?.value) {
-        setSettings(data.value);
+        setText(data.value);
       }
     }
     getSettings();
 
-    // Set up real-time subscription
     const channel = supabase
       .channel('cms_changes')
       .on('postgres_changes', 
-        { event: 'UPDATE', schema: 'public', table: 'cms_settings', filter: 'key=eq.announcement_bar' }, 
+        { event: 'UPDATE', schema: 'public', table: 'cms_settings', filter: 'key=eq.announcement' }, 
         (payload: any) => {
-          setSettings(payload.new.value);
+          setText(payload.new.value);
         }
       )
       .subscribe();
@@ -38,20 +37,16 @@ export default function AnnouncementBar() {
     };
   }, []);
 
-  if (!settings || !settings.active) return null;
+  if (!text) return null;
 
   return (
-    <div className="w-full bg-[var(--gold)] py-1.5 overflow-hidden border-b border-black/10">
+    <div className="w-full bg-[var(--gold)] py-1 overflow-hidden">
       <div className="flex whitespace-nowrap animate-marquee">
-        <span className="mx-4 text-[9px] md:text-[10px] font-bold uppercase tracking-[0.1em] md:tracking-[0.2em] text-black font-outfit">
-          {settings.text}
-        </span>
-        <span className="mx-4 text-[9px] md:text-[10px] font-bold uppercase tracking-[0.1em] md:tracking-[0.2em] text-black font-outfit" aria-hidden="true">
-          {settings.text}
-        </span>
-        <span className="mx-4 text-[9px] md:text-[10px] font-bold uppercase tracking-[0.1em] md:tracking-[0.2em] text-black font-outfit" aria-hidden="true">
-          {settings.text}
-        </span>
+        {[...Array(10)].map((_, i) => (
+          <span key={i} className="mx-8 text-[10px] font-black uppercase tracking-[0.2em] text-black font-outfit">
+            {text}
+          </span>
+        ))}
       </div>
     </div>
   );
